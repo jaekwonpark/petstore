@@ -1,0 +1,1 @@
+Put adapters (DTO <-> Beans) here.

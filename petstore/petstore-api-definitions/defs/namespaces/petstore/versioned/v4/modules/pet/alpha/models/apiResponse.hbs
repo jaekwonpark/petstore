@@ -1,0 +1,22 @@
+
+components:
+  schemas:
+    {{packageName}}.{{generatedResponseModelType}}:
+      type: "object"
+      properties:
+        data:
+        {{#if listType}}
+          type: "array"
+          items:
+            $ref: "ModelRef({{=<% %>=}} {<%responseModelRef%>}<%={{ }}=%>)"
+        {{else}}
+           type: "object"
+           $ref: "ModelRef({{=<% %>=}} {<%responseModelRef%>}<%={{ }}=%>)"
+        {{/if}}
+        metadata:
+          type: "object"
+          $ref: "ModelRef({/namespaces/myfirstnamespace/versioned/v1/modules/mymodule/alpha/models/ApiResponseMetadata})"
+      description: "REST Response for {{#if listType}} list of {{/if}} {{responseModelWrappedEntityName}} type{{#if listType}}s{{/if}}"
+
+
+

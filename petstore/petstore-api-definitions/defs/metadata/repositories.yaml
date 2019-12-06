@@ -1,0 +1,6 @@
+- name: "common"
+  type: "git"
+  uri: "https://github.com/nutanix-core/ntnx-api-common"
+  ref: "refs/heads/petstore"
+  accessToken: "$GIT_TOKEN"
+  baseDir: "common-api-definitions/defs"

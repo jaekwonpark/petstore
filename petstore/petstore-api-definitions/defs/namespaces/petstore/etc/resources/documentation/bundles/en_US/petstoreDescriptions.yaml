@@ -1,0 +1,8 @@
+- name: "getPetById"
+  value: "ID of pet to return"
+- name: "createPet"
+  value: "Create a Pet data"
+- name: "createPetResp"
+  value: "Task Id corresponding to the Pet data creation"
+- name: "taskUuid"
+  value: "UUID of the task"

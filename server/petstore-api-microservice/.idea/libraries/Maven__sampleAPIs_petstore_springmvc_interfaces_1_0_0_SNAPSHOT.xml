@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: sampleAPIs:petstore-springmvc-interfaces:1.0.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/sampleApis/petstore-springmvc-interfaces/1.0.0-SNAPSHOT/petstore-springmvc-interfaces-1.0.0-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/sampleAPIs/petstore-springmvc-interfaces/1.0.0-SNAPSHOT/petstore-springmvc-interfaces-1.0.0-SNAPSHOT-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/sampleAPIs/petstore-springmvc-interfaces/1.0.0-SNAPSHOT/petstore-springmvc-interfaces-1.0.0-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

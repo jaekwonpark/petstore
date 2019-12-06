@@ -1,0 +1,1 @@
+Put any adapter implementations in this package.

@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>sampleAPIs</groupId>
+  <artifactId>petstore</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>Petstore API project</name>
+
+  <properties>
+    <openapi-dev-platform.version>1.0.0-SNAPSHOT</openapi-dev-platform.version>
+    <swagger-codegen-version>3.0.10</swagger-codegen-version>
+    <projectVersion>${project.version}</projectVersion>
+    <platform-tools.version>0.1.6-RELEASE</platform-tools.version>
+    <common-defs-version>1.0.0-SNAPSHOT</common-defs-version>
+    <api.defs>petstore-api-definitions</api.defs>
+  </properties>
+
+  <modules>
+    <module>petstore-api-definitions</module>
+    <module>petstore-api-codegen</module>
+  </modules>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>3.0.0-M1</version>
+        <executions>
+          <execution>
+            <id>default-deploy</id>
+            <goals>
+              <goal>deploy</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>3.0.0-M1</version>
+        <executions>
+          <execution>
+            <id>default-install</id>
+            <goals>
+              <goal>install</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

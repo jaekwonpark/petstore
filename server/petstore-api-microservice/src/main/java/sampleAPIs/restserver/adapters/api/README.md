@@ -1,0 +1,1 @@
+Put adapter interface definitions here

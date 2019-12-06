@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.nutanix.apis:springmvc-method-validators:1.0.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/nutanix/apis/springmvc-method-validators/1.0.0-SNAPSHOT/springmvc-method-validators-1.0.0-20191003.165910-1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/nutanix/apis/springmvc-method-validators/1.0.0-SNAPSHOT/springmvc-method-validators-1.0.0-20191003.165910-1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/nutanix/apis/springmvc-method-validators/1.0.0-SNAPSHOT/springmvc-method-validators-1.0.0-20191003.165910-1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

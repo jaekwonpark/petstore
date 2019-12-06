@@ -1,0 +1,105 @@
+components:
+  schemas:
+    TaskUUID:
+      type: object
+      description: DocRef(taskUuid)
+      properties:
+        id:
+          type: string
+          x-constraints:
+            pattern: "ConstantRef({ext:common:/namespaces/common}, uuidPattern)"
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      xml:
+        name: Category
+    Pet:
+      type: object
+      required:
+        - name
+        - photoUrls
+      properties:
+        id:
+          type: "string"
+          x-constraints:
+            pattern: "ConstantRef({ext:common:/namespaces/common}, uuidPattern)"
+        category:
+          $ref: "ModelRef({./Category})"
+        name:
+          type: string
+          example: doggie
+        photoUrls:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            type: string
+            xml:
+              name: photoUrl
+        tags:
+          type: array
+          xml:
+            wrapped: true
+          items:
+            xml:
+              name: tag
+            $ref: "ModelRef({./Tag})"
+        status:
+          type: string
+          description: pet status in the store
+          enum:
+            - available
+            - pending
+            - sold
+      xml:
+        name: Pet
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      xml:
+        name: Tag
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+    ApiResponseMetadata:
+      description: "Metadata associated with API responses"
+      type: "object"
+      properties:
+        links:
+          type: "array"
+          items:
+            $ref: "ModelRef({./ApiLink})"
+    ApiLink:
+      type: "object"
+      description: "HATEOAS links for the request.  For paginated requests includes prev/next/first and last links"
+      properties:
+        href:
+          type: "string"
+          description: "The URL that points to the relationship"
+        rel:
+          type: "string"
+          description: "The name of the relationship"
+    StrVal:
+      allOf:
+        - $ref: "ModelRef({ext:common:/namespaces/common/versioned/v1/modules/config/alpha/models/AbstractModel})"
+        - type: "object"
+          properties:
+            str_val:
+              type: "string"

@@ -1,0 +1,22 @@
+{
+  "name": "api-javascript-client-sdk",
+  "version": "5.12.0",
+  "description": "Nutanix JavaScript client SDK",
+  "main": "ntnx-api-client-sdk.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "gulp": "^4.0.0",
+    "gulp-babel": "^8.0.0",
+    "webpack-stream": "^5.2.1",
+    "path": "^0.12.7"
+  },
+  "dependencies": {
+    "webpack": "^4.29.6"
+  }
+}

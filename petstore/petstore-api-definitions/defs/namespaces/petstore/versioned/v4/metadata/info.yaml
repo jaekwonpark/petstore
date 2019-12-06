@@ -1,0 +1,4 @@
+#replace this string with your api family - must be a number
+family: 4
+#change this to your api revision - must be a number
+revision: 1

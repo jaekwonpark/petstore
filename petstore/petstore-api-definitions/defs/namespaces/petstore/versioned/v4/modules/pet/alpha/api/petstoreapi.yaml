@@ -1,0 +1,51 @@
+paths:
+  /create:
+    post:
+      tags:
+        - "ApiEndpoint(Pet)"
+      summary: Create a single pet
+      operationId: createPet
+      requestBody:
+        description: DocRef(createPet)
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "ModelRef({/namespaces/petstore/versioned/v4/modules/pet/alpha/models/Pet})"
+      responses:
+        202:
+          description: DocRef(createPetResp)
+          content:
+            application/json:
+              schema:
+                $ref: "ApiResponse({ext:common:/namespaces/common/versioned/v1/modules/response/alpha/models/apiResponse},
+                                  {/namespaces/petstore/versioned/v4/modules/pet/alpha/models/TaskUUID}, false)"
+
+  /id/{petId}:
+    get:
+      tags:
+        - "ApiEndpoint(Pet)"
+      summary: Find pet by ID
+      description: Returns a single pet
+      operationId: getPetById
+      produces:
+        - application/json
+      parameters:
+        - name: petId
+          in: path
+          description: DocRef(getPetById)
+          required: true
+          schema:
+            type: string
+            x-constraints:
+              pattern: "ConstantRef({ext:common:/namespaces/common}, uuidPattern)"
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "ApiResponse({ext:common:/namespaces/common/versioned/v1/modules/response/alpha/models/apiResponse},
+                                   {/namespaces/petstore/versioned/v4/modules/pet/alpha/models/Pet}, false)"
+
+  /

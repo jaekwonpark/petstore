@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <artifactId>petstore-api-codegen</artifactId>
+    <groupId>sampleAPIs</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+  </parent>
+  <modelVersion>4.0.0</modelVersion>
+
+  <artifactId>petstore-javascript-client-sdk</artifactId>
+  <name>Petstore JavaScript Client SDK</name>
+  <packaging>jar</packaging>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>io.swagger.codegen.v3</groupId>
+        <artifactId>swagger-codegen-maven-plugin</artifactId>
+        <version>${swagger-codegen-version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <inputSpec>
+                ${project.build.directory}/${api.defs}-${projectVersion}/swagger-all-${projectVersion}.yaml
+              </inputSpec>
+              <language>com.github.krr.swagger.codegen.generators.JavaScriptClientSdkGenerator</language>
+              <generateSupportingFiles>false</generateSupportingFiles>
+              <generateModels>true</generateModels>
+              <generateModelDocumentation>false</generateModelDocumentation>
+              <generateModelTests>false</generateModelTests>
+              <generateApis>true</generateApis>
+              <generateApiDocumentation>false</generateApiDocumentation>
+              <generateSupportingFiles>true</generateSupportingFiles>
+              <modelPackage>Ntnx</modelPackage>
+              <configOptions>
+                <additionalProperties>true</additionalProperties>
+              </configOptions>
+              <additionalProperties>
+                <modelPropertyNaming>snakeCase</modelPropertyNaming>
+              </additionalProperties>
+            </configuration>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.github.krraghavan</groupId>
+            <artifactId>dev-platform-codegen-templates</artifactId>
+            <version>${openapi-dev-platform.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.build.directory}/generated-sources/swagger/src</source>
+              </sources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>1.7.5</version>
+        <executions>
+          <execution>
+
+            <id>install node and npm</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+            <configuration>
+              <nodeVersion>v10.15.3</nodeVersion>
+              <installDirectory>target</installDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>install packages</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <configuration>
+              <installDirectory>target</installDirectory>
+            </configuration>
+          </execution>
+          <!-- uncomment this section after APIS have been defined.  This part fails
+          if there are no APIs -->
+          <execution>
+            <id>transpile</id>
+            <goals>
+              <goal>gulp</goal>
+            </goals>
+            <configuration>
+              <!-- optional: if not specified, it will run gulp's default
+              task (and you can remove this whole <configuration> section.) -->
+              <!--<arguments>build</arguments>-->
+              <workingDirectory>${project.basedir}</workingDirectory>
+              <installDirectory>${project.build.directory}</installDirectory>
+              <outputdir>${project.build.directory}/transpile-output</outputdir>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
