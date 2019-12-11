@@ -1,26 +1,29 @@
 package sampleAPIs.restserver.services.impl;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import common.v1.r0.a1.config.Message;
-import common.v1.r0.a1.response.ApiResponseMetadata;
 import lombok.var;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
-import petstore.v4.r1.a1.pet.Pet;
-import petstore.v4.r1.a1.pet.PetApiResponse;
-import petstore.v4.r1.a1.pet.TaskUUIDApiResponse;
+import petstore.v4.r1.a1.pet.*;
 import sampleAPIs.restserver.repositories.PetRepository;
 import sampleAPIs.restserver.services.api.PetService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+import java.util.logging.Logger;
 
 @Service
 public class PetServiceImpl implements PetService {
+  private Logger logger = Logger.getLogger(this.getClass().getSimpleName());
+
   @Autowired
   private PetRepository petRepository;
+  @Autowired
+  private GridFsTemplate gridFsTemplate;
 
   public PetApiResponse.OneOfDataWrapper petById(String id) {
     PetApiResponse.OneOfDataWrapper apiResp = new PetApiResponse.OneOfDataWrapper();
@@ -60,11 +63,39 @@ public class PetServiceImpl implements PetService {
         messages.add(message);
         taskResp.setValue(messages);
       } else {
-        taskResp.setValue(uuid.toString());
+        TaskUUID taskUuid = new TaskUUID();
+        taskUuid.setId(uuid.toString());
+        taskResp.setValue(taskUuid);
       }
     }
 
     return taskResp;
+  }
+
+  public ImageUUIDApiResponse.OneOfDataWrapper upload(HttpServletRequest req) {
+
+    ImageUUIDApiResponse.OneOfDataWrapper imageResp = new ImageUUIDApiResponse.OneOfDataWrapper();
+    try {
+      DBObject metaData = new BasicDBObject();
+      Enumeration<String> h = req.getParameterNames();
+      while (h.hasMoreElements()) {
+        System.out.println(h.nextElement());
+      }
+
+      ObjectId id = gridFsTemplate.store(req.getInputStream(), "myfile",
+                                         req.getContentType(), metaData);
+      ImageUUID imageUuid = new ImageUUID();
+      imageUuid.setId(id.toString());
+      imageResp.setValue(imageUuid);
+    } catch (Exception e) {
+      List<Message> messages = new ArrayList<>();
+      Message message = new Message();
+      message.setCode("500");
+      message.setMessage("Exception while storing to db:"+e);
+      messages.add(message);
+      imageResp.setValue(messages);
+    }
+    return imageResp;
   }
 
   private UUID createPetInDB(Pet pet) {
@@ -74,7 +105,7 @@ public class PetServiceImpl implements PetService {
     try {
       petRepository.save(pet);
     } catch (Exception e) {
-      System.out.printf("Exception:%s\n", e);
+      logger.severe(e.getMessage());
       return null;
     }
     return uuid;

@@ -48,4 +48,27 @@ paths:
                 $ref: "ApiResponse({ext:common:/namespaces/common/versioned/v1/modules/response/alpha/models/apiResponse},
                                    {/namespaces/petstore/versioned/v4/modules/pet/alpha/models/Pet}, false)"
 
-  /
+  /image/upload:
+    post:
+      tags:
+        - "ApiEndpoint(Pet)"
+      summary: Upload a pet image
+      operationId: upload
+      consumes:
+        - application/octet-stream
+      requestBody:
+        description: DocRef(upload)
+        required: true
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+      responses:
+        200:
+          description: DocRef(uploadResp)
+          content:
+            application/json:
+              schema:
+                $ref: "ApiResponse({ext:common:/namespaces/common/versioned/v1/modules/response/alpha/models/apiResponse},
+                                  {/namespaces/petstore/versioned/v4/modules/pet/alpha/models/ImageUUID}, false)"

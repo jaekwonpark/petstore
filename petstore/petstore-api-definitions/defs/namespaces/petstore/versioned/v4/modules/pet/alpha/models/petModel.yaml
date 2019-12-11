@@ -1,5 +1,13 @@
 components:
   schemas:
+    ImageUUID:
+      type: object
+      description: DocRef(imageUuid)
+      properties:
+        id:
+          type: string
+          x-constraints:
+            pattern: "ConstantRef({ext:common:/namespaces/common}, uuidPattern)"
     TaskUUID:
       type: object
       description: DocRef(taskUuid)
