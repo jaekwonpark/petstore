@@ -2,13 +2,13 @@ package sampleAPIs.restserver.services.impl;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import common.v1.r0.a1.config.Message;
+import common.v1.a1.config.Message;
 import lombok.var;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
-import petstore.v4.r1.a1.pet.*;
+import petstore.v4.a1.pet.*;
 import sampleAPIs.restserver.repositories.PetRepository;
 import sampleAPIs.restserver.services.api.PetService;
 

@@ -1,9 +1,9 @@
 package sampleAPIs.restserver.services.api;
 
-import petstore.v4.r1.a1.pet.ImageUUIDApiResponse;
-import petstore.v4.r1.a1.pet.Pet;
-import petstore.v4.r1.a1.pet.PetApiResponse;
-import petstore.v4.r1.a1.pet.TaskUUIDApiResponse;
+import petstore.v4.a1.pet.ImageUUIDApiResponse;
+import petstore.v4.a1.pet.Pet;
+import petstore.v4.a1.pet.PetApiResponse;
+import petstore.v4.a1.pet.TaskUUIDApiResponse;
 
 import javax.servlet.http.HttpServletRequest;
 

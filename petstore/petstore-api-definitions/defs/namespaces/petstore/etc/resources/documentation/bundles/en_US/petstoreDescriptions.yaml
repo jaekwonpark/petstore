@@ -1,5 +1,7 @@
 - name: "getPetById"
   value: "ID of pet to return"
+- name: "getImageById"
+  value: "ID of image to download"
 - name: "createPet"
   value: "Create a Pet data"
 - name: "createPetResp"

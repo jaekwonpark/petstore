@@ -12,6 +12,13 @@
   <artifactId>petstore-go-dto-definitions</artifactId>
   <name>Petstore Go Model definitions</name>
   <packaging>jar</packaging>
+  <dependencies>
+    <dependency>
+      <groupId>com.nutanix.apis</groupId>
+      <artifactId>common-go-dto-definitions</artifactId>
+      <version>${common-defs-version}</version>
+    </dependency>
+  </dependencies>
 
   <build>
     <plugins>

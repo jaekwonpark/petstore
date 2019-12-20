@@ -72,3 +72,30 @@ paths:
               schema:
                 $ref: "ApiResponse({ext:common:/namespaces/common/versioned/v1/modules/response/alpha/models/apiResponse},
                                   {/namespaces/petstore/versioned/v4/modules/pet/alpha/models/ImageUUID}, false)"
+  /image/{uuid}:
+    get:
+      tags:
+        - "ApiEndpoint(Pet)"
+      summary: Download image file by ID
+      description: Downloads a image file
+      operationId: getImageById
+      produces:
+        - application/octet-stream
+      parameters:
+        - name: uuid
+          in: path
+          description: DocRef(getImageById)
+          required: true
+          schema:
+            type: string
+            x-constraints:
+              pattern: "ConstantRef({ext:common:/namespaces/common}, uuidPattern)"
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "ApiResponse({ext:common:/namespaces/common/versioned/v1/modules/response/alpha/models/apiResponse},
+                                   {/namespaces/petstore/versioned/v4/modules/pet/alpha/models/Pet}, false)"
+

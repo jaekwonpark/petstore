@@ -1,10 +1,11 @@
 package sampleAPIs.restserver.controllers;
 
-import common.v1.r0.a1.response.ApiResponseMetadata;
+import common.v1.a1.response.ApiResponseMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.RestController;
-import petstore.v4.r1.a1.pet.*;
+import petstore.v4.a1.pet.*;
 import sampleAPIs.restserver.services.api.PetService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,16 +22,17 @@ public class PetServiceController implements  PetApiControllerInterface {
     this.petService = petService;
   }
 
-  public ResponseEntity<PetApiResponse> getPetById(String id, HttpServletRequest r, HttpServletResponse res) {
+  public MappingJacksonValue getPetById(String id, HttpServletRequest r, HttpServletResponse res) {
     PetApiResponse.OneOfDataWrapper pet = petService.petById(id);
     ApiResponseMetadata metadata = new ApiResponseMetadata();
     PetApiResponse response = new PetApiResponse();
     response.setData(pet);
     response.setMetadata(metadata);
-    return ResponseEntity.ok(response);
+    MappingJacksonValue mapping = new MappingJacksonValue(response);
+    return mapping;
   }
 
-  public ResponseEntity<ImageUUIDApiResponse> upload(Object s, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+  public MappingJacksonValue upload(Object s, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
     ImageUUIDApiResponse.OneOfDataWrapper imageResp = petService.upload(httpServletRequest);
     ApiResponseMetadata metadata = new ApiResponseMetadata();
@@ -38,10 +40,11 @@ public class PetServiceController implements  PetApiControllerInterface {
 
     response.setData(imageResp);
     response.setMetadata(metadata);
-    return ResponseEntity.ok(response);
+    MappingJacksonValue mapping = new MappingJacksonValue(response);
+    return mapping;
   }
 
-  public ResponseEntity<TaskUUIDApiResponse> createPet(Pet var1, HttpServletRequest var2, HttpServletResponse var3) {
+  public MappingJacksonValue createPet(Pet var1, HttpServletRequest var2, HttpServletResponse var3) {
 
     TaskUUIDApiResponse.OneOfDataWrapper taskResp = petService.create(var1);
     ApiResponseMetadata metadata = new ApiResponseMetadata();
@@ -49,7 +52,13 @@ public class PetServiceController implements  PetApiControllerInterface {
 
     response.setData(taskResp);
     response.setMetadata(metadata);
-    return ResponseEntity.ok(response);
+    MappingJacksonValue mapping = new MappingJacksonValue(response);
+    return mapping;
+  }
+
+  @Override
+  public MappingJacksonValue getImageById(String s, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+    return null;
   }
 }
 
