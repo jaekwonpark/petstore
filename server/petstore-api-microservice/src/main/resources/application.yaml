@@ -1,6 +1,6 @@
 server.port: 8080
 
-basePathForYamls: "/Users/jae.park/work/src/github.com/jaekwon.park/petstore/server/petstore-api-microservice/yamls"
+basePathForYamls: "yamls"
 
 management:
   endpoints:
