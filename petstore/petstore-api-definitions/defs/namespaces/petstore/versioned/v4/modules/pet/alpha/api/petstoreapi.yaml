@@ -92,10 +92,4 @@ paths:
               pattern: "ConstantRef({ext:common:/namespaces/common}, uuidPattern)"
       responses:
         200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: "ApiResponse({ext:common:/namespaces/common/versioned/v1/modules/response/alpha/models/apiResponse},
-                                   {/namespaces/petstore/versioned/v4/modules/pet/alpha/models/Pet}, false)"
-
+          $ref: "ModelRef({ext:common:/namespaces/common/versioned/v1/modules/response/alpha/models/DownloadImage}, responses)"
