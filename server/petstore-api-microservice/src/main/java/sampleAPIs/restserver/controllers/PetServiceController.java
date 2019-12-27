@@ -1,21 +1,25 @@
 package sampleAPIs.restserver.controllers;
 
 import common.v1.a1.response.ApiResponseMetadata;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.http.converter.json.MappingJacksonValue;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import petstore.v4.a1.pet.*;
 import sampleAPIs.restserver.services.api.PetService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.logging.Logger;
+import java.io.IOException;
 
+@Slf4j
 @RestController
 public class PetServiceController implements  PetApiControllerInterface {
   private final PetService petService;
-  private Logger logger = Logger.getLogger(this.getClass().getSimpleName());
 
   @Autowired
   public PetServiceController(PetService petService) {
@@ -56,9 +60,19 @@ public class PetServiceController implements  PetApiControllerInterface {
     return mapping;
   }
 
-  @Override
-  public MappingJacksonValue getImageById(String s, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-    return null;
+  @RequestMapping(
+      value = {"/petstore/v4.a1/pet/image/{uuid}"},
+      produces = {"application/octet-stream"},
+      method = {RequestMethod.GET}
+  )
+  public void getImageById(String s, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+    GridFsResource resource = petService.download(s);
+    try {
+      IOUtils.copy(resource.getInputStream(), httpServletResponse.getOutputStream());
+    }
+    catch (IOException e) {
+      log.error(e.getMessage());
+    }
   }
 }
 

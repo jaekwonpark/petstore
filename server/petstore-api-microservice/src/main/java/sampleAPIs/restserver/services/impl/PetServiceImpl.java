@@ -6,6 +6,10 @@ import common.v1.a1.config.Message;
 import lombok.var;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsOperations;
+import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import petstore.v4.a1.pet.*;
@@ -24,6 +28,8 @@ public class PetServiceImpl implements PetService {
   private PetRepository petRepository;
   @Autowired
   private GridFsTemplate gridFsTemplate;
+  @Autowired
+  private GridFsOperations gridFsOperations;
 
   public PetApiResponse.OneOfDataWrapper petById(String id) {
     PetApiResponse.OneOfDataWrapper apiResp = new PetApiResponse.OneOfDataWrapper();
@@ -96,6 +102,10 @@ public class PetServiceImpl implements PetService {
       imageResp.setValue(messages);
     }
     return imageResp;
+  }
+
+  public GridFsResource download(String id) {
+    return gridFsOperations.getResource(gridFsTemplate.findOne(new Query(Criteria.where("_id").is(id))));
   }
 
   private UUID createPetInDB(Pet pet) {
