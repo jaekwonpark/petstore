@@ -31,7 +31,7 @@ public class PetServiceImpl implements PetService {
   @Autowired
   private GridFsOperations gridFsOperations;
 
-  public PetApiResponse.OneOfDataWrapper petById(String id) {
+  public PetApiResponse.OneOfDataWrapper petById(Long id) {
     PetApiResponse.OneOfDataWrapper apiResp = new PetApiResponse.OneOfDataWrapper();
 
     var pet = petRepository.findById(id);
@@ -48,17 +48,17 @@ public class PetServiceImpl implements PetService {
     return apiResp;
   }
 
-  public TaskUUIDApiResponse.OneOfDataWrapper create(Pet pet) {
+  public PetApiResponse.OneOfDataWrapper create(Pet pet) {
 
-    TaskUUIDApiResponse.OneOfDataWrapper taskResp = new TaskUUIDApiResponse.OneOfDataWrapper();
+    PetApiResponse.OneOfDataWrapper createResp = new PetApiResponse.OneOfDataWrapper();
 
-    if (null == pet.getName() || null == pet.getPhotoUrls()) {
+    if (null == pet.getName()) {
       List<Message> messages = new ArrayList<>();
       Message message = new Message();
       message.setCode("400");
-      message.setMessage("Missing name or photoUrls");
+      message.setMessage("Missing name of the pet");
       messages.add(message);
-      taskResp.setValue(messages);
+      createResp.setValue(messages);
     } else {
       UUID uuid = createPetInDB(pet);
       if (null == uuid) {
@@ -67,51 +67,85 @@ public class PetServiceImpl implements PetService {
         message.setCode("500");
         message.setMessage("Error while saving to MongoDB");
         messages.add(message);
-        taskResp.setValue(messages);
+        createResp.setValue(messages);
       } else {
-        TaskUUID taskUuid = new TaskUUID();
-        taskUuid.setId(uuid.toString());
-        taskResp.setValue(taskUuid);
+        createResp.setValue(pet);
       }
     }
 
-    return taskResp;
+    return createResp;
   }
 
-  public ImageUUIDApiResponse.OneOfDataWrapper upload(HttpServletRequest req) {
+  public PetApiResponse.OneOfDataWrapper upload(Long petId, HttpServletRequest req) {
 
-    ImageUUIDApiResponse.OneOfDataWrapper imageResp = new ImageUUIDApiResponse.OneOfDataWrapper();
-    try {
+    PetApiResponse.OneOfDataWrapper uploadResp = new PetApiResponse.OneOfDataWrapper();
+
+    var petOptional = petRepository.findById(petId);
+    if (petOptional.isPresent()) {
+      Pet pet = petOptional.get();
       DBObject metaData = new BasicDBObject();
-      Enumeration<String> h = req.getParameterNames();
-      while (h.hasMoreElements()) {
-        System.out.println(h.nextElement());
+      try {
+        ObjectId mongoFileId = gridFsTemplate.store(req.getInputStream(), "myfile",
+                                               req.getContentType(), metaData);
+        List photoFiles = pet.getPhotoFiles();
+        if (null == photoFiles) {
+          photoFiles = new ArrayList<String>();
+        }
+        photoFiles.add(mongoFileId.toString());
+        pet.setPhotoFiles(photoFiles);
+        updatePetInDB(pet);
       }
-
-      ObjectId id = gridFsTemplate.store(req.getInputStream(), "myfile",
-                                         req.getContentType(), metaData);
-      ImageUUID imageUuid = new ImageUUID();
-      imageUuid.setId(id.toString());
-      imageResp.setValue(imageUuid);
-    } catch (Exception e) {
+      catch (Exception e) {
+        List<Message> messages = new ArrayList<>();
+        Message message = new Message();
+        message.setCode("500");
+        message.setMessage("Exception while storing to db:"+e);
+        messages.add(message);
+        uploadResp.setValue(messages);
+      }
+      uploadResp.setValue(pet);
+    } else {
       List<Message> messages = new ArrayList<>();
       Message message = new Message();
-      message.setCode("500");
-      message.setMessage("Exception while storing to db:"+e);
+      message.setCode("400");
+      message.setMessage("Could not find the Pet for ID " + petId);
       messages.add(message);
-      imageResp.setValue(messages);
+      uploadResp.setValue(messages);
     }
-    return imageResp;
+    return uploadResp;
   }
 
-  public GridFsResource download(String id) {
-    return gridFsOperations.getResource(gridFsTemplate.findOne(new Query(Criteria.where("_id").is(id))));
+  public GridFsResource download(Long petId) {
+    var petOptional = petRepository.findById(petId);
+    if (!petOptional.isPresent()) {
+      return null;
+    }
+    Pet pet = petOptional.get();
+    List<String> photoFiles = pet.getPhotoFiles();
+    if (null == photoFiles) {
+      return null;
+    }
+    // for now get the last image
+    String mongoFileId = photoFiles.get(photoFiles.size()-1);
+    var mongoObjectId = new ObjectId(mongoFileId);
+    return gridFsOperations.getResource(gridFsTemplate.findOne(new Query(Criteria.where("_id").is(mongoObjectId))));
+  }
+
+  private Long updatePetInDB(Pet pet) {
+    Long docId = pet.getId();
+    try {
+      petRepository.save(pet);
+    } catch (Exception e) {
+      logger.severe(e.getMessage());
+      return null;
+    }
+    return docId;
   }
 
   private UUID createPetInDB(Pet pet) {
     UUID uuid = UUID.randomUUID();
 
-    pet.setId(uuid.toString());
+    pet.setId(Math.abs(uuid.getLeastSignificantBits()));
     try {
       petRepository.save(pet);
     } catch (Exception e) {

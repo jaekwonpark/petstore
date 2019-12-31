@@ -1,12 +1,12 @@
 paths:
-  /create:
+  /:
     post:
       tags:
         - "ApiEndpoint(Pet)"
-      summary: Create a single pet
-      operationId: createPet
+      summary: Add a new pet to the store
+      operationId: addPet
       requestBody:
-        description: DocRef(createPet)
+        description: DocRef(addPet)
         required: true
         content:
           application/json:
@@ -14,14 +14,14 @@ paths:
               $ref: "ModelRef({/namespaces/petstore/versioned/v4/modules/pet/alpha/models/Pet})"
       responses:
         202:
-          description: DocRef(createPetResp)
+          description: DocRef(addPetResp)
           content:
             application/json:
               schema:
                 $ref: "ApiResponse({ext:common:/namespaces/common/versioned/v1/modules/response/alpha/models/apiResponse},
-                                  {/namespaces/petstore/versioned/v4/modules/pet/alpha/models/TaskUUID}, false)"
+                                  {/namespaces/petstore/versioned/v4/modules/pet/alpha/models/Pet}, false)"
 
-  /id/{petId}:
+  /{petId}:
     get:
       tags:
         - "ApiEndpoint(Pet)"
@@ -36,9 +36,8 @@ paths:
           description: DocRef(getPetById)
           required: true
           schema:
-            type: string
-            x-constraints:
-              pattern: "ConstantRef({ext:common:/namespaces/common}, uuidPattern)"
+            type: integer
+            format: int64
       responses:
         200:
           description: Successful operation
@@ -48,16 +47,30 @@ paths:
                 $ref: "ApiResponse({ext:common:/namespaces/common/versioned/v1/modules/response/alpha/models/apiResponse},
                                    {/namespaces/petstore/versioned/v4/modules/pet/alpha/models/Pet}, false)"
 
-  /image/upload:
+  /{petId}/uploadImage:
     post:
       tags:
         - "ApiEndpoint(Pet)"
-      summary: Upload a pet image
-      operationId: upload
+      summary: Uploads an image
+      operationId: uploadFile
       consumes:
         - application/octet-stream
+      parameters:
+        - name: petId
+          in: path
+          description: DocRef(paramPetId)
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: additionalMetadata
+          in: query
+          description: Additional Metadata
+          required: false
+          schema:
+            type: string
       requestBody:
-        description: DocRef(upload)
+        description: DocRef(uploadFile)
         required: true
         content:
           application/octet-stream:
@@ -71,25 +84,24 @@ paths:
             application/json:
               schema:
                 $ref: "ApiResponse({ext:common:/namespaces/common/versioned/v1/modules/response/alpha/models/apiResponse},
-                                  {/namespaces/petstore/versioned/v4/modules/pet/alpha/models/ImageUUID}, false)"
-  /image/{uuid}:
+                                  {/namespaces/petstore/versioned/v4/modules/pet/alpha/models/Pet}, false)"
+  /{petId}/downloadImage:
     get:
       tags:
         - "ApiEndpoint(Pet)"
-      summary: Download image file by ID
-      description: Downloads a image file
+      summary: Download an image
+      description: Downloads a pet image file
       operationId: getImageById
       produces:
         - application/octet-stream
       parameters:
-        - name: uuid
+        - name: petId
           in: path
           description: DocRef(getImageById)
           required: true
           schema:
-            type: string
-            x-constraints:
-              pattern: "ConstantRef({ext:common:/namespaces/common}, uuidPattern)"
+            type: integer
+            format: int64
       responses:
         200:
           $ref: "ModelRef({ext:common:/namespaces/common/versioned/v1/modules/response/alpha/models/DownloadImage}, responses)"

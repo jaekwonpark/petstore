@@ -1,21 +1,11 @@
 components:
   schemas:
-    ImageUUID:
+    FileID:
       type: object
-      description: DocRef(imageUuid)
+      description: DocRef(fileId)
       properties:
         id:
           type: string
-          x-constraints:
-            pattern: "ConstantRef({ext:common:/namespaces/common}, uuidPattern)"
-    TaskUUID:
-      type: object
-      description: DocRef(taskUuid)
-      properties:
-        id:
-          type: string
-          x-constraints:
-            pattern: "ConstantRef({ext:common:/namespaces/common}, uuidPattern)"
     Category:
       type: object
       properties:
@@ -33,22 +23,22 @@ components:
         - photoUrls
       properties:
         id:
-          type: "string"
-          x-constraints:
-            pattern: "ConstantRef({ext:common:/namespaces/common}, uuidPattern)"
+          type: integer
+          format: int64
+          example: 10
         category:
           $ref: "ModelRef({./Category})"
         name:
           type: string
           example: doggie
-        photoUrls:
+        photoFiles:
           type: array
           xml:
             wrapped: true
           items:
             type: string
             xml:
-              name: photoUrl
+              name: fileId
         tags:
           type: array
           xml:
@@ -104,10 +94,3 @@ components:
         rel:
           type: "string"
           description: "The name of the relationship"
-    StrVal:
-      allOf:
-        - $ref: "ModelRef({ext:common:/namespaces/common/versioned/v1/modules/config/alpha/models/AbstractModel})"
-        - type: "object"
-          properties:
-            str_val:
-              type: "string"

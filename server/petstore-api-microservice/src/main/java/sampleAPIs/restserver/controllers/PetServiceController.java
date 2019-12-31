@@ -6,15 +6,14 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.http.converter.json.MappingJacksonValue;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import petstore.v4.a1.pet.*;
 import sampleAPIs.restserver.services.api.PetService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -26,7 +25,7 @@ public class PetServiceController implements  PetApiControllerInterface {
     this.petService = petService;
   }
 
-  public MappingJacksonValue getPetById(String id, HttpServletRequest r, HttpServletResponse res) {
+  public MappingJacksonValue getPetById(Long id, HttpServletRequest r, HttpServletResponse res) {
     PetApiResponse.OneOfDataWrapper pet = petService.petById(id);
     ApiResponseMetadata metadata = new ApiResponseMetadata();
     PetApiResponse response = new PetApiResponse();
@@ -36,37 +35,32 @@ public class PetServiceController implements  PetApiControllerInterface {
     return mapping;
   }
 
-  public MappingJacksonValue upload(Object s, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+  public MappingJacksonValue uploadFile(Object s, Long id, String metaData, Map<String, String> map, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
-    ImageUUIDApiResponse.OneOfDataWrapper imageResp = petService.upload(httpServletRequest);
+    PetApiResponse.OneOfDataWrapper uploadResp = petService.upload(id, httpServletRequest);
     ApiResponseMetadata metadata = new ApiResponseMetadata();
-    ImageUUIDApiResponse response = new ImageUUIDApiResponse();
+    PetApiResponse response = new PetApiResponse();
 
-    response.setData(imageResp);
+    response.setData(uploadResp);
     response.setMetadata(metadata);
     MappingJacksonValue mapping = new MappingJacksonValue(response);
     return mapping;
   }
 
-  public MappingJacksonValue createPet(Pet var1, HttpServletRequest var2, HttpServletResponse var3) {
+  public MappingJacksonValue addPet(Pet var1, HttpServletRequest var2, HttpServletResponse var3) {
 
-    TaskUUIDApiResponse.OneOfDataWrapper taskResp = petService.create(var1);
+    PetApiResponse.OneOfDataWrapper petResp = petService.create(var1);
     ApiResponseMetadata metadata = new ApiResponseMetadata();
-    TaskUUIDApiResponse response = new TaskUUIDApiResponse();
+    PetApiResponse response = new PetApiResponse();
 
-    response.setData(taskResp);
+    response.setData(petResp);
     response.setMetadata(metadata);
     MappingJacksonValue mapping = new MappingJacksonValue(response);
     return mapping;
   }
 
-  @RequestMapping(
-      value = {"/petstore/v4.a1/pet/image/{uuid}"},
-      produces = {"application/octet-stream"},
-      method = {RequestMethod.GET}
-  )
-  public void getImageById(String s, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-    GridFsResource resource = petService.download(s);
+  public void getImageById(Long id, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+    GridFsResource resource = petService.download(id);
     try {
       IOUtils.copy(resource.getInputStream(), httpServletResponse.getOutputStream());
     }
