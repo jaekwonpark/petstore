@@ -1,5 +1,5 @@
 paths:
-  /:
+  /pet:
     post:
       tags:
         - "ApiEndpoint(Pet)"
@@ -11,7 +11,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "ModelRef({/namespaces/petstore/versioned/v4/modules/pet/alpha/models/Pet})"
+              $ref: "ModelRef({/namespaces/petstore/versioned/v4/modules/main/alpha/models/Pet})"
       responses:
         202:
           description: DocRef(addPetResp)
@@ -19,9 +19,9 @@ paths:
             application/json:
               schema:
                 $ref: "ApiResponse({ext:common:/namespaces/common/versioned/v1/modules/response/alpha/models/apiResponse},
-                                  {/namespaces/petstore/versioned/v4/modules/pet/alpha/models/Pet}, false)"
+                                  {/namespaces/petstore/versioned/v4/modules/main/alpha/models/Pet}, false)"
 
-  /{petId}:
+  /pet/{petId}:
     get:
       tags:
         - "ApiEndpoint(Pet)"
@@ -45,9 +45,9 @@ paths:
             application/json:
               schema:
                 $ref: "ApiResponse({ext:common:/namespaces/common/versioned/v1/modules/response/alpha/models/apiResponse},
-                                   {/namespaces/petstore/versioned/v4/modules/pet/alpha/models/Pet}, false)"
+                                   {/namespaces/petstore/versioned/v4/modules/main/alpha/models/Pet}, false)"
 
-  /{petId}/uploadImage:
+  /pet/{petId}/uploadImage:
     post:
       tags:
         - "ApiEndpoint(Pet)"
@@ -55,6 +55,7 @@ paths:
       operationId: uploadFile
       consumes:
         - application/octet-stream
+        - image/jpeg
       parameters:
         - name: petId
           in: path
@@ -77,6 +78,10 @@ paths:
             schema:
               type: string
               format: binary
+          image/jpeg:
+            schema:
+              type: string
+              format: binary
       responses:
         200:
           description: DocRef(uploadResp)
@@ -84,8 +89,8 @@ paths:
             application/json:
               schema:
                 $ref: "ApiResponse({ext:common:/namespaces/common/versioned/v1/modules/response/alpha/models/apiResponse},
-                                  {/namespaces/petstore/versioned/v4/modules/pet/alpha/models/Pet}, false)"
-  /{petId}/downloadImage:
+                                  {/namespaces/petstore/versioned/v4/modules/main/alpha/models/Pet}, false)"
+  /pet/{petId}/downloadImage:
     get:
       tags:
         - "ApiEndpoint(Pet)"

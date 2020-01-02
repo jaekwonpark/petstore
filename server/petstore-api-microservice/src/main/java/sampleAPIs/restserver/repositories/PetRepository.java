@@ -1,6 +1,6 @@
 package sampleAPIs.restserver.repositories;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import petstore.v4.a1.pet.Pet;
+import petstore.v4.a1.main.Pet;
 
 import java.util.Optional;
 

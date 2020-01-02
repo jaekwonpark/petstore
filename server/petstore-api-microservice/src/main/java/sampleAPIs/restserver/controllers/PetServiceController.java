@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
-import petstore.v4.a1.pet.*;
+import petstore.v4.a1.main.*;
 import sampleAPIs.restserver.services.api.PetService;
 
 import javax.servlet.http.HttpServletRequest;

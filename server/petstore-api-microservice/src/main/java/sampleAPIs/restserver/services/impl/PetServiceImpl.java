@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.gridfs.GridFsOperations;
 import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
-import petstore.v4.a1.pet.*;
+import petstore.v4.a1.main.*;
 import sampleAPIs.restserver.repositories.PetRepository;
 import sampleAPIs.restserver.services.api.PetService;
 

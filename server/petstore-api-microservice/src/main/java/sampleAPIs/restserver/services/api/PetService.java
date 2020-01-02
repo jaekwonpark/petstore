@@ -1,8 +1,8 @@
 package sampleAPIs.restserver.services.api;
 
 import org.springframework.data.mongodb.gridfs.GridFsResource;
-import petstore.v4.a1.pet.Pet;
-import petstore.v4.a1.pet.PetApiResponse;
+import petstore.v4.a1.main.Pet;
+import petstore.v4.a1.main.PetApiResponse;
 
 import javax.servlet.http.HttpServletRequest;
 
